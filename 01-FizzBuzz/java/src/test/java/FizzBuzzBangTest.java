@@ -59,4 +59,10 @@ public class FizzBuzzBangTest {
         String actual = _fizzBuzzBang.process(30);
         assertEquals("FizzBuzz", actual);
     }
+
+    @Test
+    public void shouldReturnBangFor7() {
+        String actual = _fizzBuzzBang.process(7);
+        assertEquals("Bang", actual);
+    }
 }
