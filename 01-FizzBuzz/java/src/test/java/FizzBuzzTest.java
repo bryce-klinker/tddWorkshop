@@ -8,7 +8,13 @@ public class FizzBuzzTest {
     public void shouldReturn1for1() {
 		FizzBuzz fizzBuzz = new FizzBuzz();
         String actualReturnValue = fizzBuzz.process(1);
-        String expectedReturnValue = "1";
-        assertEquals(expectedReturnValue, actualReturnValue);
+        assertEquals("1", actualReturnValue);
+    }
+
+    @Test
+    public void shouldReturn2for2() {
+        FizzBuzz fizzBuzz = new FizzBuzz();
+        String actualReturnValue = fizzBuzz.process(2);
+        assertEquals("2", actualReturnValue);
     }
 }
