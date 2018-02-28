@@ -1,30 +1,22 @@
+import java.util.Arrays;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 public class FizzBuzzBang {
-
-    private static final String Fizz = "Fizz";
-    private static final String Buzz = "Buzz";
-
     public String process(Integer value) {
-        if (isFizzAndBuzz(value))
-            return Fizz + Buzz;
+        String result = getMatches(value)
+                .map(Matcher::getResult)
+                .collect(Collectors.joining(""));
 
-        if (isFizz(value))
-            return Fizz;
+        if (result.equals(""))
+            return value.toString();
 
-        if (isBuzz(value))
-            return Buzz;
-
-        return value.toString();
+        return result;
     }
 
-    private boolean isFizzAndBuzz(Integer value) {
-        return isFizz(value) && isBuzz(value);
-    }
-
-    private boolean isBuzz(Integer value) {
-        return value % 5 == 0;
-    }
-
-    private boolean isFizz(Integer value) {
-        return value % 3 == 0;
+    private Stream<Matcher> getMatches(int value) {
+        return Arrays.stream(Matcher.All)
+                .filter(m -> m.isMatch(value));
     }
 }
+
