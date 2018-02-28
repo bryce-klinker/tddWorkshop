@@ -29,4 +29,22 @@ public class RockPaperScissorsGameTest {
     String actual = _game.determineWinner("scissors", "paper");
     assertEquals("scissors beat paper", actual);
   }
+
+  @Test
+  public void rockThrownSecondCrushesScissors() {
+    String actual = _game.determineWinner("scissors", "rock");
+    assertEquals("rock beats scissors", actual);
+  }
+
+  @Test
+  public void paperThrownSecondCoversRock() {
+    String actual = _game.determineWinner("rock", "paper");
+    assertEquals("paper beats rock", actual);
+  }
+
+  @Test
+  public void scissorsThrowSecondCutsPaper() {
+    String actual = _game.determineWinner("paper", "scissors");
+    assertEquals("scissors beat paper", actual);
+  }
 }
