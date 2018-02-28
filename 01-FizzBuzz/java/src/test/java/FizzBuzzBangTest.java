@@ -65,4 +65,16 @@ public class FizzBuzzBangTest {
         String actual = _fizzBuzzBang.process(7);
         assertEquals("Bang", actual);
     }
+
+    @Test
+    public void shouldReturnBangForValueDivisibleBy7() {
+        String actual = _fizzBuzzBang.process(14);
+        assertEquals("Bang", actual);
+    }
+
+    @Test
+    public void shouldReturnFizzBangForValueDivisibleByThreeAndSeven() {
+        String actual = _fizzBuzzBang.process(21);
+        assertEquals("FizzBang", actual);
+    }
 }

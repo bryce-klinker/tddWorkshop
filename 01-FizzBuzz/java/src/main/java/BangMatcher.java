@@ -1,7 +1,7 @@
 public class BangMatcher extends Matcher {
     @Override
     public boolean isMatch(int value) {
-        return value == 7;
+        return value % 7 == 0;
     }
 
     @Override
