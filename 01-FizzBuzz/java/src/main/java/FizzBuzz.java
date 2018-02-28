@@ -4,7 +4,7 @@ public class FizzBuzz {
     private static final String Buzz = "Buzz";
 
     public String process(Integer value) {
-        if (isFizz(value) && isBuzz(value))
+        if (isFizzAndBuzz(value))
             return Fizz + Buzz;
 
         if (isFizz(value))
@@ -14,6 +14,10 @@ public class FizzBuzz {
             return Buzz;
 
         return value.toString();
+    }
+
+    private boolean isFizzAndBuzz(Integer value) {
+        return isFizz(value) && isBuzz(value);
     }
 
     private boolean isBuzz(Integer value) {
