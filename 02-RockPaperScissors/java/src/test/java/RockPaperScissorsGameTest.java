@@ -1,18 +1,32 @@
 import static org.junit.Assert.*;
 
-import org.junit.Ignore;
+import org.junit.Before;
 import org.junit.Test;
 
-@Ignore("Remove this line when you're ready to run the tests")
 public class RockPaperScissorsGameTest {
+
+  private RockPaperScissorsGame _game;
+
+  @Before
+  public void setUp() {
+    _game = new RockPaperScissorsGame();
+  }
 
   @Test
   public void rockCrushesScissors() {
-    RockPaperScissorsGame game = new RockPaperScissorsGame();
-    
-    String actualResult = game.determineWinner("rock", "scissors");
-    String expectedResult = "rock beats scissors";
-    
-    assertEquals(expectedResult, actualResult);
+    String actual = _game.determineWinner("rock", "scissors");
+    assertEquals("rock beats scissors", actual);
+  }
+
+  @Test
+  public void paperCoversRock() {
+    String actual = _game.determineWinner("paper", "rock");
+    assertEquals("paper beats rock", actual);
+  }
+
+  @Test
+  public void scissorsCutPaper() {
+    String actual = _game.determineWinner("scissors", "paper");
+    assertEquals("scissors beat paper", actual);
   }
 }
