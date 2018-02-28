@@ -1,4 +1,4 @@
-public class FizzBuzz {
+public class FizzBuzzBang {
 
     private static final String Fizz = "Fizz";
     private static final String Buzz = "Buzz";
