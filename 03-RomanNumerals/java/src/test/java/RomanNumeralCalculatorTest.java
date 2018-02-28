@@ -19,4 +19,12 @@ public class RomanNumeralCalculatorTest {
     String actualResult = calculator.add("I", "II");
     assertEquals("III", actualResult);
   }
+
+  @Test
+  public void twoPlusTwoIsFour() {
+    RomanNumeralCalculator calculator = new RomanNumeralCalculator();
+
+    String actualResult = calculator.add("II", "II");
+    assertEquals("IV", actualResult);
+  }
 }
