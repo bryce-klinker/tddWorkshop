@@ -1,18 +1,22 @@
-import static org.junit.Assert.assertEquals;
-
-import org.junit.Ignore;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 public class RomanNumeralCalculatorTest {
 
   @Test
-  @Ignore("Remove this line when you are ready to run this test")
   public void onePlusOneIsTwo() {
     RomanNumeralCalculator calculator = new RomanNumeralCalculator();
 
     String actualResult = calculator.add("I", "I");
-    String expectedResult = "II";
+    assertEquals("II", actualResult);
+  }
 
-    assertEquals(expectedResult, actualResult);
+  @Test
+  public void onePlusTwoIsThree() {
+    RomanNumeralCalculator calculator = new RomanNumeralCalculator();
+
+    String actualResult = calculator.add("I", "II");
+    assertEquals("III", actualResult);
   }
 }
