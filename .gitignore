@@ -16,3 +16,5 @@ build
 [Bb]in/
 packages/
 TestResults/
+
+**/.DS_Store
