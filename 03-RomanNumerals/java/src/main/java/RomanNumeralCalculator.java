@@ -1,29 +1,16 @@
 public class RomanNumeralCalculator {
+  private final RomanNumeralToIntegerConverter _toIntConverter;
+  private final IntegerToRomanNumeralConverter _toRomanConverter;
+
+  RomanNumeralCalculator() {
+    _toIntConverter = new RomanNumeralToIntegerConverter();
+    _toRomanConverter = new IntegerToRomanNumeralConverter();
+  }
 
   public String add(String numeral1, String numeral2) {
-    return asString(asInt(numeral1) + asInt(numeral2));
-  }
-
-  private int asInt(String numeral) {
-    if (numeral.equals("I"))
-      return 1;
-
-    if (numeral.equals("II"))
-      return 2;
-
-    return 0;
-  }
-
-  private String asString(int value) {
-    if (value == 2)
-      return "II";
-
-    if (value == 3)
-      return "III";
-
-    if (value == 4)
-      return "IV";
-
-    return "";
+    int first = _toIntConverter.toInt(numeral1);
+    int second = _toIntConverter.toInt(numeral2);
+    return _toRomanConverter.toRoman(first + second);
   }
 }
+

@@ -1,30 +1,43 @@
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
 public class RomanNumeralCalculatorTest {
+  private RomanNumeralCalculator _calculator;
+
+  @Before
+  public void setUp() {
+    _calculator = new RomanNumeralCalculator();
+  }
 
   @Test
   public void onePlusOneIsTwo() {
-    RomanNumeralCalculator calculator = new RomanNumeralCalculator();
-
-    String actualResult = calculator.add("I", "I");
-    assertEquals("II", actualResult);
+    String actual = _calculator.add("I", "I");
+    assertEquals("II", actual);
   }
 
   @Test
   public void onePlusTwoIsThree() {
-    RomanNumeralCalculator calculator = new RomanNumeralCalculator();
-
-    String actualResult = calculator.add("I", "II");
-    assertEquals("III", actualResult);
+    String actual = _calculator.add("I", "II");
+    assertEquals("III", actual);
   }
 
   @Test
   public void twoPlusTwoIsFour() {
-    RomanNumeralCalculator calculator = new RomanNumeralCalculator();
+    String actual = _calculator.add("II", "II");
+    assertEquals("IV", actual);
+  }
 
-    String actualResult = calculator.add("II", "II");
-    assertEquals("IV", actualResult);
+  @Test
+  public void threePlusTwoIsFive() {
+    String actual = _calculator.add("III", "II");
+    assertEquals("V", actual);
+  }
+
+  @Test
+  public void fivePlusFourIsNine() {
+    String actual = _calculator.add("V", "IV");
+    assertEquals("IX", actual);
   }
 }
