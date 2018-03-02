@@ -13,12 +13,24 @@ public class RenewalNotificationService {
   }
 
   public void notifyAtRiskSubscribers() {
+    List<String> subscribers = tryGetSubscribers();
+    trySendEmails(subscribers);
+  }
+
+  private List<String> tryGetSubscribers() {
     LocalDate threeMonthsFromNow = _clock.getCurrentDate().plusMonths(3);
     int month = threeMonthsFromNow.getMonth().getValue();
     int day = threeMonthsFromNow.getDayOfMonth();
     int year = threeMonthsFromNow.getYear();
-    List<String> subscribers = _subscriberService.getSubscribersThatWillExpireBetweenNowAndDate(day, month, year);
-    trySendEmails(subscribers);
+    try {
+      return getSubscribers(month, day, year);
+    } catch (Exception ex) {
+      return getSubscribers(month, day, year);
+    }
+  }
+
+  private List<String> getSubscribers(int month, int day, int year) {
+    return _subscriberService.getSubscribersThatWillExpireBetweenNowAndDate(day, month, year);
   }
 
   private void trySendEmails(List<String> subscribers) {
