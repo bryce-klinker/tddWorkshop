@@ -18,6 +18,18 @@ public class RenewalNotificationService {
     int day = threeMonthsFromNow.getDayOfMonth();
     int year = threeMonthsFromNow.getYear();
     List<String> subscribers = _subscriberService.getSubscribersThatWillExpireBetweenNowAndDate(day, month, year);
+    trySendEmails(subscribers);
+  }
+
+  private void trySendEmails(List<String> subscribers) {
+    try {
+      sendEmails(subscribers);
+    } catch (Exception ex) {
+      sendEmails(subscribers);
+    }
+  }
+
+  private void sendEmails(List<String> subscribers) {
     _emailService.emailMessage("Please renew your subscription to Ferret Fancy!", subscribers);
   }
 }

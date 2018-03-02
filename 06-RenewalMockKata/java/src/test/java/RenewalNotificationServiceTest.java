@@ -1,9 +1,7 @@
 import org.junit.Before;
 import org.junit.Test;
 
-import java.time.Instant;
 import java.time.LocalDate;
-import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
 
@@ -46,6 +44,12 @@ public class RenewalNotificationServiceTest {
     assertEquals(4, _subscriberService.day);
     assertEquals(5, _subscriberService.month);
     assertEquals(2018, _subscriberService.year);
+  }
+
+  @Test
+  public void notifyingSubscribersShouldRetrySendingEmails() {
+    _emailService.exception = new RuntimeException("This is not good");
+    _renewalNotificationService.notifyAtRiskSubscribers();
   }
 }
 
