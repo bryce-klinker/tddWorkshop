@@ -22,11 +22,15 @@ public class RenewalNotificationService {
   }
 
   private void trySendEmails(List<String> subscribers) {
-    try {
-      sendEmails(subscribers);
-    } catch (Exception ex) {
-      sendEmails(subscribers);
+    boolean wasSuccessful = false;
+    while (!wasSuccessful) {
+      try {
+        sendEmails(subscribers);
+        wasSuccessful = true;
+      } catch (Exception ex) {
+      }
     }
+
   }
 
   private void sendEmails(List<String> subscribers) {

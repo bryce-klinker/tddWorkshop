@@ -51,5 +51,12 @@ public class RenewalNotificationServiceTest {
     _emailService.exception = new RuntimeException("This is not good");
     _renewalNotificationService.notifyAtRiskSubscribers();
   }
+
+  @Test
+  public void notifyingSubscribersShouldRetrySendingEmailsMultipleTimes() {
+    _emailService.exceptionCount = 3;
+    _emailService.exception = new RuntimeException("This is really bad");
+    _renewalNotificationService.notifyAtRiskSubscribers();
+  }
 }
 
