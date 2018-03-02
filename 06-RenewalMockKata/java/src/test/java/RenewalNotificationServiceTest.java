@@ -1,31 +1,35 @@
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
 
 public class RenewalNotificationServiceTest {
 
+  private FakeEmailService _emailService;
+  private FakeSubscriberService _subscriberService;
+
+  @Before
+  public void setUp() {
+    _emailService = new FakeEmailService();
+    _subscriberService = new FakeSubscriberService();
+  }
+
   @Test
   public void notifyingSubscribersShouldSendRenewalMessage() {
-    FakeEmailService emailService = new FakeEmailService();
-
-    RenewalNotificationService renewalNotificationService = new RenewalNotificationService(new FakeSubscriberService(), emailService);
+    RenewalNotificationService renewalNotificationService = new RenewalNotificationService(_subscriberService, _emailService);
     renewalNotificationService.notifyAtRiskSubscribers();
 
-    assertEquals("Please renew your subscription to Ferret Fancy!", emailService.message);
+    assertEquals("Please renew your subscription to Ferret Fancy!", _emailService.message);
   }
 
   @Test
   public void notifyingSubscribersShouldSendEmailsToExpiredSubscribers() {
-    FakeSubscriberService subscriberService = new FakeSubscriberService();
-    subscriberService.subscribers.add("three");
+    _subscriberService.subscribers.add("three");
 
-    FakeEmailService emailService = new FakeEmailService();
-
-    RenewalNotificationService renewalNotificationService = new RenewalNotificationService(subscriberService, emailService);
+    RenewalNotificationService renewalNotificationService = new RenewalNotificationService(_subscriberService, _emailService);
     renewalNotificationService.notifyAtRiskSubscribers();
 
-    assertEquals("three", emailService.emails.get(0));
+    assertEquals("three", _emailService.emails.get(0));
   }
 }
 
