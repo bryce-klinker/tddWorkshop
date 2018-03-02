@@ -22,11 +22,16 @@ public class RenewalNotificationService {
     int month = threeMonthsFromNow.getMonth().getValue();
     int day = threeMonthsFromNow.getDayOfMonth();
     int year = threeMonthsFromNow.getYear();
-    try {
-      return getSubscribers(month, day, year);
-    } catch (Exception ex) {
-      return getSubscribers(month, day, year);
+    List<String> subscribers = null;
+    boolean wasSuccessful = false;
+    while (!wasSuccessful) {
+      try {
+        subscribers = getSubscribers(month, day, year);
+        wasSuccessful = true;
+      } catch (Exception ex) {
+      }
     }
+    return subscribers;
   }
 
   private List<String> getSubscribers(int month, int day, int year) {

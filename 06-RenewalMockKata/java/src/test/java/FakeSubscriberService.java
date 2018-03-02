@@ -8,14 +8,18 @@ public class FakeSubscriberService implements SubscriberService {
   public int month;
   public int year;
 
+  public int exceptionCount;
   public RuntimeException exception;
 
   @Override
   public List<String> getSubscribersThatWillExpireBetweenNowAndDate(int day, int month, int year) {
     if (exception != null) {
+      exceptionCount -= 1;
       RuntimeException exceptionToThrow = exception;
-      exception = null;
-      throw exception;
+      if (exceptionCount <= 0) {
+        exception = null;
+      }
+      throw exceptionToThrow;
     }
 
     this.day = day;

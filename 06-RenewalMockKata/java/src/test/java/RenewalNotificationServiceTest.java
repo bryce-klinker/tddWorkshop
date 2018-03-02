@@ -64,5 +64,12 @@ public class RenewalNotificationServiceTest {
     _subscriberService.exception = new RuntimeException("Whoops");
     _renewalNotificationService.notifyAtRiskSubscribers();
   }
+
+  @Test
+  public void notifyingSubscribersShouldRetryGettingSubscribersMultipleTimes() {
+    _subscriberService.exceptionCount = 3;
+    _subscriberService.exception = new RuntimeException("Noop");
+    _renewalNotificationService.notifyAtRiskSubscribers();
+  }
 }
 
