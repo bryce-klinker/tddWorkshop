@@ -1,7 +1,4 @@
 import java.time.LocalDate;
-import java.time.temporal.Temporal;
-import java.time.temporal.TemporalUnit;
-import java.util.Date;
 import java.util.List;
 
 public class RenewalNotificationService {
