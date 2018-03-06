@@ -12,10 +12,8 @@ public class GildedRoseTest {
     assertItemEquals("Aged Brie", 1, 1, GildedRose.items.get(1));
     assertItemEquals("Elixir of the Mongoose", 6, 4, GildedRose.items.get(2));
     assertItemEquals("Sulfuras, Hand of Ragnaros", 80, 0, GildedRose.items.get(3));
-		for (int i = 0; i < GildedRose.items.size(); ++i) {
-		  Item item = GildedRose.items.get(i);
-		  System.out.println("Item: " + item.name +  " quality: " + item.quality + " sellin: " + item.sellIn);
-    }
+    assertItemEquals("Backstage passes to a TAFKAL80ETC concert", 21, 14, GildedRose.items.get(4));
+    assertItemEquals("Conjured Mana Cake", 5, 2, GildedRose.items.get(5));
   }
 
   private void assertItemEquals(String expectedName, int expectedQuality, int expectedSellIn, Item actualItem) {
