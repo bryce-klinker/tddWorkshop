@@ -24,7 +24,6 @@ public class GildedRose {
     updateQuality();
   }
 
-
   public static void updateQuality() {
     for (int i = 0; i < items.size(); i++) {
       updateItem(items.get(i));
@@ -32,6 +31,9 @@ public class GildedRose {
   }
 
   public static void updateItem(Item currentItem) {
+    if (isSulfuras(currentItem))
+      return;
+
     if ((!"Aged Brie".equals(currentItem.getName())) && !"Backstage passes to a TAFKAL80ETC concert".equals(currentItem.getName())) {
       if (currentItem.getQuality() > 0) {
         if (!"Sulfuras, Hand of Ragnaros".equals(currentItem.getName())) {
@@ -81,4 +83,7 @@ public class GildedRose {
     }
   }
 
+  private static boolean isSulfuras(Item currentItem) {
+    return currentItem.getName().contains("Sulfuras");
+  }
 }
