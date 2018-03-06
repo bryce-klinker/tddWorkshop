@@ -61,7 +61,13 @@ public class GildedRoseTest {
     assertItemEquals(name, -2, 10, item);
   }
 
-
+  @Test
+  public void shouldIncreaseQualityOfAgedBrieIfPastSellIn() {
+    String name = "Aged Brie";
+    Item item = new Item(name, 0, 12);
+    GildedRose.updateItem(item);
+    assertItemEquals(name, -1, 14, item);
+  }
 
   private void assertItemEquals(String expectedName, int expectedSellIn, int expectedQuality, Item actualItem) {
     assertEquals(expectedName, actualItem.name);
