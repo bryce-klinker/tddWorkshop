@@ -41,54 +41,17 @@ public class GildedRose {
       case "Backstage passes to a TAFKAL80ETC concert":
         updateBackstage(currentItem);
         return;
+      default:
+        updateNormalItem(currentItem);
+        return;
     }
-    if ((!"Aged Brie".equals(currentItem.getName())) && !"Backstage passes to a TAFKAL80ETC concert".equals(currentItem.getName())) {
-      if (currentItem.getQuality() > 0) {
-        if (!"Sulfuras, Hand of Ragnaros".equals(currentItem.getName())) {
-          currentItem.setQuality(currentItem.getQuality() - 1);
-        }
-      }
-    } else {
-      if (currentItem.getQuality() < 50) {
-        currentItem.setQuality(currentItem.getQuality() + 1);
+  }
 
-        if ("Backstage passes to a TAFKAL80ETC concert".equals(currentItem.getName())) {
-          if (currentItem.getSellIn() < 11) {
-            if (currentItem.getQuality() < 50) {
-              currentItem.setQuality(currentItem.getQuality() + 1);
-            }
-          }
-
-          if (currentItem.getSellIn() < 6) {
-            if (currentItem.getQuality() < 50) {
-              currentItem.setQuality(currentItem.getQuality() + 1);
-            }
-          }
-        }
-      }
-    }
-
-    if (!"Sulfuras, Hand of Ragnaros".equals(currentItem.getName())) {
-      currentItem.setSellIn(currentItem.getSellIn() - 1);
-    }
-
-    if (currentItem.getSellIn() < 0) {
-      if (!"Aged Brie".equals(currentItem.getName())) {
-        if (!"Backstage passes to a TAFKAL80ETC concert".equals(currentItem.getName())) {
-          if (currentItem.getQuality() > 0) {
-            if (!"Sulfuras, Hand of Ragnaros".equals(currentItem.getName())) {
-              currentItem.setQuality(currentItem.getQuality() - 1);
-            }
-          }
-        } else {
-          currentItem.setQuality(0);
-        }
-      } else {
-        if (currentItem.getQuality() < 50) {
-          currentItem.setQuality(currentItem.getQuality() + 1);
-        }
-      }
-    }
+  private static void updateNormalItem(Item currentItem) {
+    currentItem.setQuality(currentItem.getQuality() - 1);
+    currentItem.setSellIn(currentItem.getSellIn() - 1);
+    if (currentItem.getSellIn() < 0)
+      currentItem.setQuality(currentItem.getQuality() - 1);
   }
 
   private static void updateBackstage(Item currentItem) {
