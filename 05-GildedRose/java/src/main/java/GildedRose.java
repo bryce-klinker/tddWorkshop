@@ -31,7 +31,7 @@ public class GildedRose {
     }
   }
 
-  private static void updateItem(Item currentItem) {
+  public static void updateItem(Item currentItem) {
     if ((!"Aged Brie".equals(currentItem.getName())) && !"Backstage passes to a TAFKAL80ETC concert".equals(currentItem.getName())) {
       if (currentItem.getQuality() > 0) {
         if (!"Sulfuras, Hand of Ragnaros".equals(currentItem.getName())) {
