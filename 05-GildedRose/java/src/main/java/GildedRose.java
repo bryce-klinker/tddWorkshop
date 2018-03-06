@@ -36,9 +36,7 @@ public class GildedRose {
 
     if ((!"Aged Brie".equals(currentItem.getName())) && !"Backstage passes to a TAFKAL80ETC concert".equals(currentItem.getName())) {
       if (currentItem.getQuality() > 0) {
-        if (!"Sulfuras, Hand of Ragnaros".equals(currentItem.getName())) {
-          currentItem.setQuality(currentItem.getQuality() - 1);
-        }
+        currentItem.setQuality(currentItem.getQuality() - 1);
       }
     } else {
       if (currentItem.getQuality() < 50) {
@@ -60,17 +58,15 @@ public class GildedRose {
       }
     }
 
-    if (!"Sulfuras, Hand of Ragnaros".equals(currentItem.getName())) {
-      currentItem.setSellIn(currentItem.getSellIn() - 1);
-    }
+    currentItem.setSellIn(currentItem.getSellIn() - 1);
 
     if (currentItem.getSellIn() < 0) {
       if (!"Aged Brie".equals(currentItem.getName())) {
         if (!"Backstage passes to a TAFKAL80ETC concert".equals(currentItem.getName())) {
           if (currentItem.getQuality() > 0) {
-            if (!"Sulfuras, Hand of Ragnaros".equals(currentItem.getName())) {
+//            if (!"Sulfuras, Hand of Ragnaros".equals(currentItem.getName())) {
               currentItem.setQuality(currentItem.getQuality() - 1);
-            }
+//            }
           }
         } else {
           currentItem.setQuality(0);
