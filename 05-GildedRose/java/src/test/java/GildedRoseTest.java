@@ -45,6 +45,14 @@ public class GildedRoseTest {
     assertItemEquals(name, 4, 15, item);
   }
 
+  @Test
+  public void shouldDecreaseQualityByTwoIfSellInIsLessThanZero() {
+    String name = "+5 Dexterity Vest";
+    Item item = new Item(name, -1, 12);
+    GildedRose.updateItem(item);
+    assertItemEquals(name, -2, 10, item);
+  }
+
   private void assertItemEquals(String expectedName, int expectedSellIn, int expectedQuality, Item actualItem) {
     assertEquals(expectedName, actualItem.name);
     assertEquals(expectedQuality, actualItem.quality);
