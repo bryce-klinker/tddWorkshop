@@ -8,7 +8,7 @@ public class GildedRoseTest {
     GildedRose.main(null);
 		for (int i = 0; i < GildedRose.items.size(); ++i) {
 		  Item item = GildedRose.items.get(i);
-		  System.out.print("Item: " + item.name +  " quality: " + item.quality + " sellin: " + item.sellIn);
+		  System.out.println("Item: " + item.name +  " quality: " + item.quality + " sellin: " + item.sellIn);
     }
   }
 }
