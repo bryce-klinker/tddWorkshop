@@ -30,11 +30,19 @@ public class GildedRoseTest {
   }
 
   @Test
-  public void shouldIncreaseQualityTwoForBackstageItemWhenSellInLessThanTen() {
+  public void shouldIncreaseQualityTwoForBackstageItemWhenSellInLessThanEleven() {
     String name = "Backstage passes to a TAFKAL80ETC concert";
     Item item = new Item(name, 10, 12);
     GildedRose.updateItem(item);
     assertItemEquals(name, 9, 14, item);
+  }
+
+  @Test
+  public void shouldIncreaseQualityThreeForBackstageItemWhenSellInLessThanSix() {
+    String name = "Backstage passes to a TAFKAL80ETC concert";
+    Item item = new Item(name, 5, 12);
+    GildedRose.updateItem(item);
+    assertItemEquals(name, 4, 15, item);
   }
 
   private void assertItemEquals(String expectedName, int expectedSellIn, int expectedQuality, Item actualItem) {
