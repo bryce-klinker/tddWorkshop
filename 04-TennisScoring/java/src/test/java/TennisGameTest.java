@@ -27,7 +27,7 @@ public class TennisGameTest {
 
   @Test
   public void scoreShouldBeCorrect() {
-    TennisGame game = new TennisGame("player1", "player2");
+    TennisGame game = new TennisGame();
 
     scorePoints(game, "player1", this.player1Score);
     scorePoints(game, "player2", this.player2Score);
