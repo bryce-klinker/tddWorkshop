@@ -46,12 +46,22 @@ public class GildedRoseTest {
   }
 
   @Test
+  public void shouldSetQualityOfBackstagePassToZeroAfterSellIn() {
+    String name = "Backstage passes to a TAFKAL80ETC concert";
+    Item item = new Item(name, 0, 12);
+    GildedRose.updateItem(item);
+    assertItemEquals(name, -1, 0, item);
+  }
+
+  @Test
   public void shouldDecreaseQualityByTwoIfSellInIsLessThanZero() {
     String name = "+5 Dexterity Vest";
     Item item = new Item(name, -1, 12);
     GildedRose.updateItem(item);
     assertItemEquals(name, -2, 10, item);
   }
+
+
 
   private void assertItemEquals(String expectedName, int expectedSellIn, int expectedQuality, Item actualItem) {
     assertEquals(expectedName, actualItem.name);
