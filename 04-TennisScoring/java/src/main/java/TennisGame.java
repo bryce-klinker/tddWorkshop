@@ -1,4 +1,5 @@
 public class TennisGame {
+  private static final String PlayerOneName = "player1";
   private int _playerOneScore = 0;
   private int _playerTwoScore = 0;
 
@@ -6,7 +7,7 @@ public class TennisGame {
   }
 
   public void wonPoint(String playerName) {
-    if (playerName == "player1")
+    if (playerName.equals(PlayerOneName))
       _playerOneScore += 1;
     else
       _playerTwoScore += 1;

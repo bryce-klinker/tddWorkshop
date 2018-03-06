@@ -1,12 +1,14 @@
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 
 
 public class GildedRoseTest {
 
-	@Test
-	public void testTheTruth() {
-		assertTrue(true);
-	}
+  @Test
+  public void shouldDecreaseQualityOfItems() {
+    GildedRose.main(null);
+		for (int i = 0; i < GildedRose.items.size(); ++i) {
+		  Item item = GildedRose.items.get(i);
+		  System.out.print("Item: " + item.name +  " quality: " + item.quality + " sellin: " + item.sellIn);
+    }
+  }
 }
