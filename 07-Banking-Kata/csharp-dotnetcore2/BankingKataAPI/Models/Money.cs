@@ -1,377 +1,353 @@
 ﻿using System;
 using System.Globalization;
+using Newtonsoft.Json;
 
-public sealed class Money : IEquatable<Money>, IComparable, IComparable<Money>
+namespace BankingKataAPI.Models
 {
+    public sealed class Money : IEquatable<Money>, IComparable, IComparable<Money>
+    {
 
-	private static int[] cents = new int[] { 1, 10, 100, 1000 };
+        private static readonly int[] Cents = { 1, 10, 100, 1000 };
 
-	CultureInfo cultureInfo;
+        private readonly CultureInfo _cultureInfo;
 
-	RegionInfo regionInfo;
+        private readonly RegionInfo _regionInfo;
 
-	long amount;
+        public long LongAmount { get; private set; }
 
-	public Money() : this(0, CultureInfo.CurrentCulture) { }
+        public Money() : this(0, CultureInfo.CurrentCulture) { }
 
-	public Money(decimal amount) : this(amount, CultureInfo.CurrentCulture) { }
+        public Money(decimal amount) : this(amount, CultureInfo.CurrentCulture) { }
 
-	public Money(long amount) : this(amount, CultureInfo.CurrentCulture) { }
+        public Money(long longAmount) : this(longAmount, CultureInfo.CurrentCulture) { }
 
-	public Money(string cultureName) : this(new CultureInfo(cultureName)) { }
+        public Money(string cultureName) : this(new CultureInfo(cultureName)) { }
 
-	public Money(decimal amount, string cultureName) : this(amount, new CultureInfo
+        public Money(decimal amount, string cultureName) : this(amount, new CultureInfo(cultureName))
+        { }
 
-		(cultureName))
-	{ }
+        public Money(CultureInfo cultureInfo) : this(0, cultureInfo) { }
 
-	public Money(CultureInfo cultureInfo) : this(0, cultureInfo) { }
+        public Money(decimal amount, CultureInfo cultureInfo)
+        {
+            _cultureInfo = cultureInfo ?? throw new ArgumentNullException("cultureInfo");
 
-	public Money(decimal amount, CultureInfo cultureInfo)
-	{
+            _regionInfo = new RegionInfo(cultureInfo.LCID);
 
-		if (cultureInfo == null) throw new ArgumentNullException("cultureInfo");
+            LongAmount = Convert.ToInt64(Math.Round(amount * CentFactor));
 
-		this.cultureInfo = cultureInfo;
+        }
 
-		this.regionInfo = new RegionInfo(cultureInfo.LCID);
+        [JsonConstructor]
+        public Money(long longAmount, string isoCurrencySymbol)
+            : this(longAmount, CultureInfo.GetCultureInfo(isoCurrencySymbol))
+        {
 
-		this.amount = Convert.ToInt64(Math.Round(amount * CentFactor));
+        }
 
-	}
+        public Money(long longAmount, CultureInfo cultureInfo)
+        {
+            _cultureInfo = cultureInfo ?? throw new ArgumentNullException(nameof(cultureInfo));
 
-	public Money(long amount, CultureInfo cultureInfo)
-	{
+            _regionInfo = RegionInfo.CurrentRegion;
 
-		if (cultureInfo == null) throw new ArgumentNullException("cultureInfo");
+            LongAmount = longAmount * CentFactor;
 
-		this.cultureInfo = cultureInfo;
+        }
 
-        this.regionInfo = RegionInfo.CurrentRegion;
+        private int CentFactor => Cents[_cultureInfo.NumberFormat.CurrencyDecimalDigits];
 
-		this.amount = amount * CentFactor;
+        public string EnglishCultureName => _cultureInfo.Name;
 
-	}
+        public string ISOCurrencySymbol => _regionInfo.ISOCurrencySymbol;
 
-	private int CentFactor
-	{
+        public decimal Amount => (decimal)LongAmount / CentFactor;
 
-		get { return cents[cultureInfo.NumberFormat.CurrencyDecimalDigits]; }
+        public int DecimalDigits => _cultureInfo.NumberFormat.CurrencyDecimalDigits;
 
-	}
+        public static bool operator >(Money first, Money second)
+        {
 
-	public string EnglishCultureName
-	{
+            AssertSameCurrency(first, second);
 
-		get { return cultureInfo.Name; }
+            return first.LongAmount > second.LongAmount;
 
-	}
+        }
 
-	public string ISOCurrencySymbol
-	{
+        public static bool operator >=(Money first, Money second)
+        {
 
-		get { return regionInfo.ISOCurrencySymbol; }
+            AssertSameCurrency(first, second);
 
-	}
+            return first.LongAmount >= second.LongAmount;
 
-	public decimal Amount
-	{
+        }
 
-		get { return amount / CentFactor; }
+        public static bool operator <=(Money first, Money second)
+        {
 
-	}
+            AssertSameCurrency(first, second);
 
-	public int DecimalDigits
-	{
+            return first.LongAmount <= second.LongAmount;
 
-		get { return cultureInfo.NumberFormat.CurrencyDecimalDigits; }
+        }
 
-	}
+        public static bool operator <(Money first, Money second)
+        {
 
-	public static bool operator >(Money first, Money second)
-	{
+            AssertSameCurrency(first, second);
 
-		AssertSameCurrency(first, second);
+            return first.LongAmount < second.LongAmount;
 
-		return first.amount > second.amount;
+        }
 
-	}
+        public static Money operator +(Money first, Money second)
+        {
 
-	public static bool operator >=(Money first, Money second)
-	{
+            AssertSameCurrency(first, second);
 
-		AssertSameCurrency(first, second);
+            return new Money(first.Amount + second.Amount, first.EnglishCultureName);
 
-		return first.amount >= second.amount;
+        }
 
-	}
+        public static Money operator -(Money first, Money second)
+        {
 
-	public static bool operator <=(Money first, Money second)
-	{
+            AssertSameCurrency(first, second);
 
-		AssertSameCurrency(first, second);
+            return new Money(first.Amount - second.Amount, first.EnglishCultureName);
 
-		return first.amount <= second.amount;
+        }
 
-	}
+        public static Money Add(Money first, Money second)
+        {
 
-	public static bool operator <(Money first, Money second)
-	{
+            return first + second;
 
-		AssertSameCurrency(first, second);
+        }
 
-		return first.amount < second.amount;
 
-	}
+        public static implicit operator Money(decimal amount)
 
-	public static Money operator +(Money first, Money second)
-	{
+        {
 
-		AssertSameCurrency(first, second);
+            return new Money(amount, CultureInfo.CurrentCulture);
 
-		return new Money(first.Amount + second.Amount, first.EnglishCultureName);
+        }
 
-	}
+        public static implicit operator Money(long amount)
+        {
 
-	public static Money operator -(Money first, Money second)
-	{
+            return new Money(amount, CultureInfo.CurrentCulture);
 
-		AssertSameCurrency(first, second);
+        }
 
-		return new Money(first.Amount - second.Amount, first.EnglishCultureName);
+        public override bool Equals(object obj)
+        {
 
-	}
+            return (obj is Money) && Equals((Money)obj);
 
-	public static Money Add(Money first, Money second)
-	{
+        }
 
-		return first + second;
+        public override int GetHashCode()
+        {
 
-	}
+            return LongAmount.GetHashCode() ^ _cultureInfo.GetHashCode();
 
+        }
 
-	public static implicit operator Money(decimal amount)
+        private static void AssertSameCurrency(Money first, Money second)
+        {
 
-	{
+            if (first.ISOCurrencySymbol != second.ISOCurrencySymbol)
 
-		return new Money(amount, CultureInfo.CurrentCulture);
+                throw new InvalidOperationException("Money type mismatch.");
 
-	}
+        }
 
-	public static implicit operator Money(long amount)
-	{
+        public bool Equals(Money other)
+        {
+            if (other is null) return false;
 
-		return new Money(amount, CultureInfo.CurrentCulture);
+            return ISOCurrencySymbol == other.ISOCurrencySymbol 
+                   && LongAmount == other.LongAmount;
 
-	}
+        }
 
-	public override bool Equals(object obj)
-	{
+        public static bool operator ==(Money first, Money second)
+        {
 
-		return (obj is Money) && Equals((Money)obj);
+            if (object.ReferenceEquals(first, second)) return true;
 
-	}
+            if (object.ReferenceEquals(first, null) || object.ReferenceEquals(second, null))
 
-	public override int GetHashCode()
-	{
+                return false;
 
-		return amount.GetHashCode() ^ cultureInfo.GetHashCode();
+            return (first.ISOCurrencySymbol == second.ISOCurrencySymbol &&
 
-	}
+                    first.Amount == second.Amount);
 
-	private static void AssertSameCurrency(Money first, Money second)
-	{
+        }
 
-		if (first.ISOCurrencySymbol != second.ISOCurrencySymbol)
+        public static bool operator !=(Money first, Money second)
+        {
 
-			throw new InvalidOperationException("Money type mismatch.");
+            return !first.Equals(second);
 
-	}
+        }
 
-	public bool Equals(Money other)
-	{
+        public static Money operator *(Money money, decimal value)
+        {
 
-		if (object.ReferenceEquals(other, null)) return false;
+            if (money == null) throw new ArgumentNullException("money");
 
-		return ((ISOCurrencySymbol == other.ISOCurrencySymbol) &&
+            return new Money(Decimal.Floor(money.Amount * value), money.EnglishCultureName);
 
-			(amount == other.amount));
+        }
 
-	}
+        public static Money Multiply(Money money, decimal value)
+        {
 
-	public static bool operator ==(Money first, Money second)
-	{
+            return money * value;
 
-		if (object.ReferenceEquals(first, second)) return true;
+        }
 
-		if (object.ReferenceEquals(first, null) || object.ReferenceEquals(second, null))
+        public static Money operator /(Money money, decimal value)
+        {
 
-			return false;
+            if (money == null) throw new ArgumentNullException("money");
 
-		return (first.ISOCurrencySymbol == second.ISOCurrencySymbol &&
+            return new Money(money.Amount / value, money.EnglishCultureName);
 
-			first.Amount == second.Amount);
+        }
 
-	}
+        public static Money Divide(Money first, decimal value)
+        {
 
-	public static bool operator !=(Money first, Money second)
-	{
+            return first / value;
 
-		return !first.Equals(second);
+        }
 
-	}
+        public Money Copy()
+        {
 
-	public static Money operator *(Money money, decimal value)
-	{
+            return new Money(Amount, _cultureInfo);
 
-		if (money == null) throw new ArgumentNullException("money");
+        }
 
-		return new Money(Decimal.Floor(money.Amount * value), money.EnglishCultureName);
+        public Money Clone()
+        {
 
-	}
+            return new Money(_cultureInfo);
 
-	public static Money Multiply(Money money, decimal value)
-	{
+        }
 
-		return money * value;
+        public int CompareTo(object obj)
+        {
 
-	}
+            if (obj == null)
+            {
 
-	public static Money operator /(Money money, decimal value)
-	{
+                return 1;
 
-		if (money == null) throw new ArgumentNullException("money");
+            }
 
-		return new Money(money.Amount / value, money.EnglishCultureName);
+            if (!(obj is Money))
+            {
 
-	}
+                throw new ArgumentException("Argument must be money");
 
-	public static Money Divide(Money first, decimal value)
-	{
+            }
 
-		return first / value;
+            return CompareTo((Money)obj);
 
-	}
+        }
 
-	public Money Copy()
-	{
+        public int CompareTo(Money other)
+        {
 
-		return new Money(Amount, cultureInfo);
+            if (this < other)
+            {
 
-	}
+                return -1;
 
-	public Money Clone()
-	{
+            }
 
-		return new Money(cultureInfo);
+            if (this > other)
+            {
 
-	}
+                return 1;
 
-	public int CompareTo(object obj)
-	{
+            }
 
-		if (obj == null)
-		{
+            return 0;
 
-			return 1;
+        }
 
-		}
+        public Money[] Allocate(long[] ratios)
+        {
 
-		if (!(obj is Money))
-		{
+            return Allocate(ratios, CultureInfo.CurrentCulture);
 
-			throw new ArgumentException("Argument must be money");
+        }
 
-		}
+        //Foemmel’s Conundrum test from Martin Fowler’s
 
-		return CompareTo((Money)obj);
+        //Patterns of Enterprise Application Architecture
 
-	}
+        public Money[] Allocate(long[] ratios, CultureInfo cultureInfo)
+        {
 
-	public int CompareTo(Money other)
-	{
+            if (ratios == null) throw new ArgumentNullException("ratios");
 
-		if (this < other)
-		{
+            long total = 0;
 
-			return -1;
+            for (int i = 0; i < ratios.Length; i++) total += ratios[i];
 
-		}
+            long remainder = LongAmount;
 
-		if (this > other)
-		{
+            Money[] results = new Money[ratios.Length];
 
-			return 1;
+            for (int i = 0; i < results.Length; i++)
+            {
 
-		}
+                results[i] = new Money(Amount * ratios[i] / total, cultureInfo);
 
-		return 0;
+                remainder -= results[i].LongAmount;
 
-	}
+                for (int j = 0; j < remainder; j++)
+                {
 
-	public Money[] Allocate(long[] ratios)
-	{
+                    results[i].LongAmount++;
 
-		return Allocate(ratios, CultureInfo.CurrentCulture);
+                }
 
-	}
+            }
 
-	//Foemmel’s Conundrum test from Martin Fowler’s
+            return results;
 
-	//Patterns of Enterprise Application Architecture
+        }
 
-	public Money[] Allocate(long[] ratios, CultureInfo cultureInfo)
-	{
+        public override string ToString()
+        {
 
-		if (ratios == null) throw new ArgumentNullException("ratios");
+            return Amount.ToString("C", _cultureInfo);
 
-		long total = 0;
+        }
 
-		for (int i = 0; i < ratios.Length; i++) total += ratios[i];
+        public string ToString(string format)
+        {
 
-		long remainder = amount;
+            return Amount.ToString(format, this._cultureInfo);
 
-		Money[] results = new Money[ratios.Length];
+        }
 
-		for (int i = 0; i < results.Length; i++)
-		{
+        public static Money LocalCurrency
+        {
 
-			results[i] = new Money(Amount * ratios[i] / total, cultureInfo);
+            get { return new Money(CultureInfo.CurrentCulture); }
 
-			remainder -= results[i].amount;
+        }
 
-			for (int j = 0; j < remainder; j++)
-			{
-
-				results[i].amount++;
-
-			}
-
-		}
-
-		return results;
-
-	}
-
-	public override string ToString()
-	{
-
-		return Amount.ToString("C", cultureInfo);
-
-	}
-
-	public string ToString(string format)
-	{
-
-		return Amount.ToString(format, this.cultureInfo);
-
-	}
-
-	public static Money LocalCurrency
-	{
-
-		get { return new Money(CultureInfo.CurrentCulture); }
-
-	}
-
+    }
 }
