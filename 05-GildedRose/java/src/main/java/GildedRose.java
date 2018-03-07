@@ -43,7 +43,6 @@ public class GildedRose {
         return;
       default:
         updateNormalItem(currentItem);
-        return;
     }
   }
 
